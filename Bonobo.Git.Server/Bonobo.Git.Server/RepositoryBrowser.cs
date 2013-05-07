@@ -265,7 +265,7 @@ namespace Bonobo.Git.Server
         private bool TryGetCommit(string treeName, out Commit commit)
         {
             commit = null;
-            try
+            try 
             {
                 var current = new Commit(_repository, treeName);
                 if (current.IsCommit)
@@ -286,8 +286,16 @@ namespace Bonobo.Git.Server
         {
             if (string.IsNullOrEmpty(branchName))
             {
-                branch = _repository.Branches.Where(i => i.Value.Target.Hash == _repository.Head.Target.Hash).FirstOrDefault().Value;
-                return true;
+                if (_repository.Head.Target != null)
+                {
+                    branch = _repository.Branches.Where(i => i.Value.Target.Hash == _repository.Head.Target.Hash).FirstOrDefault().Value;
+                    return true;
+                }
+                else if (_repository.Branches.Count > 0)
+                {
+                    branch = _repository.Branches.Take(1).FirstOrDefault().Value;
+                    return true;
+                }
             }
             else
             {
