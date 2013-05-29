@@ -23,6 +23,35 @@ namespace Bonobo.Git.Server
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            string GitRepositoryPrefix = "Git.aspx/";
+            string AnonymousGitRepositoryPrefix = "Git.aspx/Anonymous/";
+
+            //legacy routes
+           routes.MapRoute("SecureInfoRefs_Legacy", GitRepositoryPrefix + "{project}/info/refs",
+                            new { controller = "Git", action = "SecureGetInfoRefs" },
+                            new { method = new HttpMethodConstraint("GET") });
+
+           routes.MapRoute("SecureUploadPack_Legacy", GitRepositoryPrefix + "{project}/git-upload-pack",
+                            new { controller = "Git", action = "SecureUploadPack" },
+                            new { method = new HttpMethodConstraint("POST") });
+
+           routes.MapRoute("SecureReceivePack_Legacy", GitRepositoryPrefix + "{project}/git-receive-pack",
+                            new { controller = "Git", action = "SecureReceivePack" },
+                            new { method = new HttpMethodConstraint("POST") });
+
+           routes.MapRoute("AnonymousInfoRefs_Legacy", AnonymousGitRepositoryPrefix + "{project}/info/refs",
+                            new { controller = "Git", action = "AnonymousGetInfoRefs" },
+                            new { method = new HttpMethodConstraint("GET") });
+
+           routes.MapRoute("AnonymousReceivePack_Legacy", AnonymousGitRepositoryPrefix + "{project}/git-receive-pack",
+                            new { controller = "Git", action = "AnonymousReceivePack" },
+                            new { method = new HttpMethodConstraint("POST") });
+
+           routes.MapRoute("AnonymousUploadPack_Legacy", AnonymousGitRepositoryPrefix + "{project}/git-upload-pack",
+                            new { controller = "Git", action = "AnonymousUploadPack" },
+                            new { method = new HttpMethodConstraint("POST") });
+
+            //new routes
             routes.MapRoute("SecureInfoRefs", "{project}.git/info/refs",
                             new { controller = "Git", action = "SecureGetInfoRefs" },
                             new { method = new HttpMethodConstraint("GET") });
