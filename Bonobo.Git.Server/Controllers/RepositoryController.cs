@@ -32,9 +32,11 @@ namespace Bonobo.Git.Server.Controllers
 
 
         [FormsAuthorizeAttribute]
-        public ActionResult Index()
+        public ActionResult Index(RepositoryIndexModel data = null)
         {
-            return View(GetIndexModel());
+            data = (data == null) ? new RepositoryIndexModel() : data;
+            data.repositories = GetIndexModel(data.search);
+            return View(data);
         }
 
         [FormsAuthorizeRepository(RequiresRepositoryAdministrator = true)]
@@ -306,18 +308,26 @@ namespace Bonobo.Git.Server.Controllers
             ViewData["AvailableTeams"] = TeamRepository.GetAllTeams().Select(i => i.Name).ToArray();
         }
 
-        private IEnumerable<RepositoryDetailModel> GetIndexModel()
+        private IEnumerable<RepositoryDetailModel> GetIndexModel(string search = null)
         {
+            IEnumerable<RepositoryDetailModel> repositories;
+            
             if (User.IsInRole(Definitions.Roles.Administrator))
             {
-                return ConvertRepositoryModels(RepositoryRepository.GetAllRepositories());
+                repositories = ConvertRepositoryModels(RepositoryRepository.GetAllRepositories());
             }
             else
             {
                 var userTeams = TeamRepository.GetTeams(User.Identity.Name).Select(i => i.Name).ToArray();
-                var repositories = ConvertRepositoryModels(RepositoryRepository.GetPermittedRepositories(User.Identity.Name, userTeams));
-                return repositories;
+                repositories = ConvertRepositoryModels(RepositoryRepository.GetPermittedRepositories(User.Identity.Name, userTeams));
             }
+
+            if (search != null)
+            {
+                repositories = repositories.Where(x => x.Name.ToUpper().Contains(search.ToUpper()));
+            }
+
+            return repositories;
         }
 
         private IList<RepositoryDetailModel> ConvertRepositoryModels(IList<RepositoryModel> models)

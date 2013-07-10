@@ -1,5 +1,5 @@
 ﻿@using Bonobo.Git.Server.Extensions
-@model IEnumerable<RepositoryDetailModel>
+@model RepositoryIndexModel
 @{
     ViewBag.Title = Resources.Repository_Index_Title;
 }
@@ -25,9 +25,16 @@
     <div class="create">@Html.ActionLink(Resources.Repository_Index_CreateNew, "Create")</div>
 }
 <h3>@Resources.Repository_Index_Repositories</h3>
+<div class="w-grid-search">
+    @using (Html.BeginForm(null, null, FormMethod.Get, new {@class = "uniForm"}))
+    {
+        @Html.TextBoxFor(x => x.search, new { @class = "textInput small"});
+        <input type="submit" value="Search" class="primaryAction" />
+    }   
+</div>
 <div class="w-grid">
     @{
-        var permitted = new WebGrid(source: Model, defaultSort: "Name", rowsPerPage: 15);
+        var permitted = new WebGrid(source: Model.repositories, defaultSort: "Name", rowsPerPage: 15);
         @permitted.GetHtml(
         tableStyle: "grid",
         headerStyle: "head",

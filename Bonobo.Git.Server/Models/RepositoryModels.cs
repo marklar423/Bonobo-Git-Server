@@ -17,6 +17,12 @@ namespace Bonobo.Git.Server.Models
         public string[] Teams { get; set; }
     }
 
+    public class RepositoryIndexModel
+    {
+        public string search { get; set; }
+        public IEnumerable<RepositoryDetailModel> repositories { get; set; }
+    }
+
     public class RepositoryDetailModel
     {
         [FileName(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName")]

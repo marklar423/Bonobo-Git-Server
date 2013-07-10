@@ -42,6 +42,8 @@ table th a, table th a:hover, table th a:visited { color: #fff;}
 .w-grid { padding: 4px; background: #e0e0e0; border: 1px solid #b9b9b9;} 
 .w-grid .action { width: 30px;}
 .w-grid .bool { width: 50px; text-align: center;}
+.w-grid-search {margin-bottom: 1em;}
+.w-grid-search input[type=submit] {padding: 2px 4px;}
 
 .syntaxhighlighter .line { line-height: 1.2em !important;}
 
